@@ -20,30 +20,27 @@ tfms = transforms.Compose([
 
 faceClassifier = cv.CascadeClassifier('Classifiers/haarface.xml')
 
-camera = cv.VideoCapture(0)
+# read the image file
+img = cv.imread('data/images/fake_0001_00_00_01_0.jpg')
+grey = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+faces = faceClassifier.detectMultiScale(grey, scaleFactor=1.1, minNeighbors=4)
 
-while cv.waitKey(1) & 0xFF != ord('q'):
-    _, img = camera.read()
-    grey = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
-    faces = faceClassifier.detectMultiScale(grey, scaleFactor=1.1, minNeighbors=4)
+for x, y, w, h in faces:
+    faceRegion = img[y:y + h, x:x + w]
+    faceRegion = cv.cvtColor(faceRegion, cv.COLOR_BGR2RGB)
 
-    for x, y, w, h in faces:
-        faceRegion = img[y:y + h, x:x + w]
-        faceRegion = cv.cvtColor(faceRegion, cv.COLOR_BGR2RGB)
-        # cv.imshow('Test', faceRegion)
+    faceRegion = tfms(faceRegion)
+    faceRegion = faceRegion.unsqueeze(0)
 
-        faceRegion = tfms(faceRegion)
-        faceRegion = faceRegion.unsqueeze(0)
+    mask, binary = model.forward(faceRegion)
+    res = torch.mean(mask).item()
 
-        mask, binary = model.forward(faceRegion)
-        res = torch.mean(mask).item()
-        # res = binary.item()
-        print(res)
-        cv.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 2)
+    cv.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 2)
 
-        if res < 0.5:
-            cv.putText(img, 'Fake', (x, y + h + 30), cv.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255))
-        else:
-            cv.putText(img, 'Real', (x, y + h + 30), cv.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255))
+    if res < 0.5:
+        cv.putText(img, 'Fake', (x, y + h + 30), cv.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255))
+    else:
+        cv.putText(img, 'Real', (x, y + h + 30), cv.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255))
 
-    cv.imshow('Deep Pixel-wise Binary Supervision Anti-Spoofing', img)
+cv.imshow('Test', img)
+cv.waitKey(0)
