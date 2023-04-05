@@ -50,12 +50,14 @@ for filename in os.listdir(input_dir):
         # Draw bounding box and label on image
         cv.rectangle(img, (x1, y1), (x2, y2), (0, 0, 255), 2)
         if res < 0.5:
-            cv.putText(img, 'Fake', (x1, y1 - 10), cv.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
+            #cv.putText(img, 'Fake', (x1, y1 - 10), cv.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
             # Save fake image to output directory
             cv.imwrite(os.path.join(output_dir, filename), img)
+            print('Fake :'+filename)
         else:
-            cv.putText(img, 'Real', (x1, y1 - 10), cv.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
+            #cv.putText(img, 'Real', (x1, y1 - 10), cv.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
+            print('Real')
 
     # Display and wait for key press
-    cv.imshow('Test', img)
-    cv.waitKey(0)
+    #cv.imshow('Test', img)
+    #cv.waitKey(0)
