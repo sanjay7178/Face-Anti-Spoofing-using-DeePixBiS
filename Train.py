@@ -8,6 +8,7 @@ from Model import DeePixBiS
 from Loss import PixWiseBCELoss
 from Metrics import predict, test_accuracy, test_loss
 from Trainer import Trainer
+from torch.utils.tensorboard import SummaryWriter
 
 model = DeePixBiS()
 model.load_state_dict(torch.load('./DeePixBiS.pth'))
