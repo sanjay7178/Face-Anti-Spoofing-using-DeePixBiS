@@ -1,0 +1,2 @@
+Real photos: 12500
+Fake photos: 55000
