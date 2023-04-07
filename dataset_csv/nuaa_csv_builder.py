@@ -4,17 +4,17 @@ import csv
 import os
 
 # Header for the CSV File
-header = ["name", "label"]
+header = ["sno", "name", "label"]
 
 # Path to the folder of client images
 # Change the Path depending upon the location
-client_directory = "./Detectedface/ClientFace/"
-imposter_directory = "./Detectedface/ImposterFace/"
+client_directory = "../csv_dataset_builder/Detectedface/ClientFace/"
+imposter_directory = "../csv_dataset_builder/Detectedface/ImposterFace/"
 
 # Opening the CSV File
 client_count = 0
 imposter_count = 0
-with open("nuaa_images.csv", "w", newline="") as f:
+with open("./dataset_csv/nuaa_images.csv", "w", newline="") as f:
   writer = csv.writer(f)
 
   # Wrie the header
@@ -24,18 +24,18 @@ with open("nuaa_images.csv", "w", newline="") as f:
   for folderName in os.listdir(client_directory):
     # Looping over the images in the subdirectory and write them
     for fileName in os.listdir(os.path.join(client_directory, folderName) + "/"):
-      writer.writerow([client_count, os.path.join(client_directory, folderName, fileName)])
+      writer.writerow([client_count, os.path.join(client_directory, folderName, fileName), 1])
       client_count += 1
 
   # Looping over the subdirectoris in the IMPOSTER Folder
   for folderName in os.listdir(imposter_directory):
     # Looping over the images in the subdirectory and write them
     for fileName in os.listdir(os.path.join(imposter_directory, folderName) + "/"):
-      writer.writerow([client_count + imposter_count, os.path.join(imposter_directory, folderName, fileName)])
+      writer.writerow([client_count + imposter_count, os.path.join(imposter_directory, folderName, fileName), 0])
       imposter_count += 1
 
 # Write the number of files
-with open("nuaa_dataset_details.csv", "w", newline="") as f:
+with open("./dataset_csv//nuaa_dataset_details.csv", "w", newline="") as f:
   writer = csv.writer(f)
 
   writer.writerow(["Client Face Images", "Imposter Face Images", "Total Images"])
