@@ -27,8 +27,7 @@ class Trainer():
             loss.backward()
             self.opt.step()
 
-            if batch % 9 == 0:
-                print(f'Loss : {loss}')
+        print(f'Loss : {loss}')
 
         # self.model.eval()
         test_acc = test_accuracy(self.model, self.val_dl)
